@@ -55,6 +55,7 @@ def int_reward_func(completions, **kwargs) -> list[float]:
 
 def strict_format_reward_func(completions, **kwargs) -> list[float]:
     # functions adopted from Will Brown's GRPO demo:
+    # thanks to https://github.com/facebookresearch/SPG/issues/5 for reporting 
     # https://gist.github.com/willccbb/4676755236bb08cab5f4e54a0475d6fb
     # re.DOTALL allows `.` to match newline characters inside multi-line reasoning.
     pattern = r"^<reasoning>\n.*?\n</reasoning>\n<answer>\n.*?\n</answer>\n$"
@@ -64,7 +65,8 @@ def strict_format_reward_func(completions, **kwargs) -> list[float]:
 
 
 def soft_format_reward_func(completions, **kwargs) -> list[float]:
-    # functions adopted from Will Brown's GRPO demo:
+    # functions adopted from Will Brown's GRPO demo: 
+    # thanks to https://github.com/facebookresearch/SPG/issues/5 for reporting 
     # https://gist.github.com/willccbb/4676755236bb08cab5f4e54a0475d6fb
     # re.DOTALL allows `.` to match newline characters inside multi-line reasoning.
     pattern = r"<reasoning>.*?</reasoning>\s*<answer>.*?</answer>"

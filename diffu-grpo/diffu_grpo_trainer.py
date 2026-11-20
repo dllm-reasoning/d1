@@ -407,7 +407,10 @@ class DiffuGRPOTrainer(GRPOTrainer):
         temperature = self.args.temperature or 0.0
         cfg_scale = self.args.cfg_scale
 
-        with unwrap_model_for_generation(self.model_wrapped, self.accelerator) as unwrapped_model:
+        # Rollouts never need gradients: compute_loss recomputes the log-probs with grad. Unlike HF generate(),
+        # self.generate is not wrapped in no_grad, so without this every diffusion step builds an autograd graph
+        # over the trainable (e.g. LoRA) parameters and keeps its activations alive.
+        with unwrap_model_for_generation(self.model_wrapped, self.accelerator) as unwrapped_model, torch.no_grad():
             generation_batch_size = self.args.generation_batch_size
             prompt_completion_ids_all = []
             # Process in batches
